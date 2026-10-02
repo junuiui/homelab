@@ -58,3 +58,19 @@ Provides traditional routing capabilities, including NAT and other connectivity 
 | :--- | :--- | :--- | :--- |
 | **Security Groups**<br>(보안 그룹) | • **Access Control & Permissions**<br>• Managing security rights across the network. | **Yes**<br>(Possesses a SID) | • **99% of Homelab use cases**.<br>• Assigning NTFS file/folder permissions (e.g., Read/Write).<br>• Granting system rights (e.g., Remote Desktop access).<br>• Can *also* be used as an email distribution list if needed. |
 | **Distribution Groups**<br>(배포 그룹) | • **Mass Communication**<br>• Email broadcasting lists. | **No**<br>(Ignored by ACLs) | • **Exclusively for email applications** (e.g., Microsoft Exchange).<br>• Creating company-wide announcement emails (e.g., `all-staff@company.local`).<br>• Cannot be used to secure or grant access to network resources. |
+
+## Networks
+### Domain Controller (Main Server PC)
+- IPv4
+- Subnet Mask
+- Default Gateway
+- DNS Server
+
+## File SHring
+
+### NTFS vs sharing
+#### NTFS
+- File & Folder level
+
+#### Sharing
+- Folder level

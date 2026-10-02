@@ -102,6 +102,98 @@
    1. Then type the ip address, mask and gateway which are shown on the terminal
 6. DNS will be set later!
 
+## File Sharing
+### Network Method
+1. Create a folder in `C:\`
+2. Named it, `jh.shared`
+3. go to property
+   1. Sharing tab
+   2. Advanced Sharing
+   3. Click `Share this folder`
+   4. Permissions
+   5. Add -> look for domain
+   6. Apply!
+4. go to Security (for NTFS) 
+   1. You can change permissions as you want
+5. go to Client (another VM)
+   1. File Explorer
+   2. Right click Network
+   3. Map Ntwork Drive
+   4. and go back to Server (VM) and type `hostname` in CMD to find out the name of the host
+   5. Then, in the Map Network Drive, put the `\\[hostname]\folder_name` path
+
+> Problem: when you restart (reboot), it will disappear.
+
+### Mapped Method
+> it solves the issues with Network Method
+1. Go to Server (VM)
+2. Group Policy Management
+3. Create new GPO
+   1. User and Preferences
+   2. Windows Settings
+   3. Drive Maps
+   4. new drive
+   5. Put `\\[hostname]\folder_name` path
+   6. drag it into OU 
+4. Now, they can see even if they reboot
+
+### File Server resource Manager (FSRM)
+1. Installation
+   1. Go to Server Manager
+   2. Manage -> Add Roles and Features
+   3. Server Roles -> File and Storage Services -> File and iSCSI Services -> **File Server Resource Manager**
+2. Open `File Server Resource Manager`
+   1. Quota Management (to set up maximum amount of data limit)
+      1. Create quota
+   2. File Screen Management (controlling the file types allowed)
+      1. Create File Screen
+
+## Security Policy
+### Account Lockout Policy Configuration
+> Configure an account lockout policy to protect against brute-force attack  
+> 1. password threshold
+> 2. password lockout duration
+
+1. Group Policy Management
+2. Create new GPO or edit the `default domain policy`
+3. Computer configuration -> Pollicies -> Windows Settings -> Security Settings -> Account Policies -> Account Lockout Policy
+
+### User Rights Asrsignment
+> Assign and restrict user rights to enhance security  
+> restrict remote desktops, deny logon locally
+
+1. GPO
+2. Create new GPO
+3. Computer Config -> Policies -> Windows Settings -> Security Settings -> Local Policies -> User Rights Assignments
+
+### Implementing Fine-Grained Password Poilicies
+> Apply different password policies to different groups of users.  
+> Scenario: The organization wants to apply strcter password policies to adminstrative accounts while allowing standard users to have less stringent requirements
+
+1. Active Directory Administrative Center (ADAC)
+2. jh (local) > System > Password Setting Container
+3. New password setting
+   1. Precedence: determines the order in which policy objects are applied when multiple Password Settings are applied to a user or group. (Lower number the highest priority)
+
+
+## Service Accounts & SysInternals
+### Service Accounts
+> Not for person. For specific tasks and purposes  
+> a computer that displays a program 24/7 (restaurant menu, ...)
+1. Create OU (Service Account OU)
+   1. create new user
+2. In client VM, go to internet browser
+   1. Download [Sysinternal Suite](https://learn.microsoft.com/en-us/sysinternals/downloads/sysinternals-suite)
+3. Set up `Autologon64`
+4. reboot, then autologin completed!
+5. then setup browser to show.
+
+
+
+
+
+
+
 ## Problems
 1. While doing Pre-req check in `Prmote this erver to domain controller`, encountered pre-req failed due to "verification of preq for mc promotion failed. certificate server is installed".
    1. It's because AD DS has to be the first, not after AD CS is installed. 
@@ -111,3 +203,6 @@
    1. It is because I previously set up the GPO for [Restrict Control Panel](#4-group-policy-management). It blocked all the users (since I have not made the groups YET!!)
    2. So, removed the admin group in the [Restrict Control Panel](#4-group-policy-management) just for now
    3. And `Win + R` to open up run.exe then `gpupdate /force` 
+3. When Adding Users to AD, manual addtion takes too much time. (roughly 15 seconds by hand). It seems small just for 1 person, but what if we have to add 100 people at once? It would take approximately, 15*100 = 1500 seconds (= 25 minutes)
+   1. Solution would be very obvious. **AUTOMATE**!!
+   2. check []() for automation processes

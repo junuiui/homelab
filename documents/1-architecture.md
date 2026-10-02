@@ -35,3 +35,5 @@ jh.local
 ```
 
 ## Group Policy
+
+## File Sharing
