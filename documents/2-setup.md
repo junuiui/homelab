@@ -137,18 +137,36 @@ Create each GPO by right-clicking the domain and selecting `Create a GPO in this
 
 ## 6. DHCP and DNS Configuration
 
-> **TODO:** Not yet configured. The DHCP and DNS roles are installed, but scope and zone configuration is still pending.
-
 ### DHCP
-<!-- TODO: authorize DHCP server in AD -->
-<!-- TODO: create IPv4 scope (range, exclusions, lease duration) -->
-<!-- TODO: scope options (003 Router, 006 DNS Servers, 015 DNS Domain Name) -->
-<!-- TODO: reservation for one client by MAC address -->
-<!-- TODO: verify on client (ipconfig /release, ipconfig /renew, ipconfig /all) -->
+1. Open **Server Manager**, click **Tools**, and select **DHCP**.
+2. Select your server name, right-click **IPv4**, and click **New Scope**.
+3. Follow the New Scope Wizard:
+   - **Scope Name**: Enter a name (e.g., `HQ-DHCP-Scope`).
+   - **IP Address Range**: Set the start and end IP addresses (e.g., `10.0.0.1` to `10.0.0.254`).
+   - **Subnet Mask**: `255.255.255.0` (Prefix: 24).
+   - **Exclusions**: Add any IP ranges to exclude from distribution (e.g., static IPs).
+   - **Lease Duration**: Keep default (8 days).
+4. Configure Scope Options:
+   - **003 Router (Default Gateway)**: Enter your gateway IP (e.g., `10.0.0.2`).
+   - **006 DNS Servers**: Enter your AD server IP (e.g., `10.0.0.1`).
+   - **015 DNS Domain Name**: Enter your domain name (e.g., `jh.local`).
+5. Authorize the DHCP server in Active Directory and ensure the scope is activated.
 <!-- SCREENSHOT: DHCP scope and scope options -->
 <!-- SCREENSHOT: Client lease visible in Address Leases -->
 
 ### DNS
+1. Open **Server Manager**, click **Tools**, and select **DNS**.
+2. **Forward Lookup Zones**:
+   - Expand your domain (e.g., `jh.local`) and confirm that default Active Directory records (`_msdcs`, `DomainControllers`, SRV records) are present.
+3. **Reverse Lookup Zone**:
+   - Right-click **Reverse Lookup Zones**, select **New Zone**, choose Primary zone, IPv4, and enter your Network ID (e.g., `10.0.0`).
+   - Allow secure dynamic updates and complete the wizard.
+4. **Forwarders**:
+   - Right-click your server name in DNS Manager, select **Properties**, and go to the **Forwarders** tab.
+   - Add external public DNS servers (e.g., Google `8.8.8.8` or Cloudflare `1.1.1.1`) to resolve external addresses.
+5. **Verification**:
+   - Run `nslookup jh.local` and `nslookup` for external domains in Command Prompt.
+   - Run `dcdiag /test:dns` to verify DNS health.
 <!-- TODO: confirm forward lookup zone and _msdcs records -->
 <!-- TODO: create reverse lookup zone -->
 <!-- TODO: configure forwarder -->
