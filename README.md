@@ -235,3 +235,8 @@ To eliminate manual GUI overhead, PowerShell scripts were developed to automate 
 ### Problem 3: Manual account provisioning inefficiency
 - **Symptom:** Creating accounts manually took ~15 seconds per account, making large-scale management unviable.
 - **Resolution:** Developed PowerShell onboarding scripts (`new-user-csv.ps1`) to process CSV input files in bulk.
+
+---
+
+## Todo:
+1. Script on GPO settings
